@@ -4,15 +4,11 @@ import java.util.stream.Collectors;
 public class WordFrequencyGame {
     public String play(String inputStr) {
         Map<String, List<Word>> map = getStringListMap(inputStr);
-        List<Word> wordList;
+        List<Word> wordList = getWords(map);
+        return getOutputString(wordList);
+    }
 
-        List<Word> list = new ArrayList<>();
-        for (Map.Entry<String, List<Word>> entry : map.entrySet()) {
-            Word word = new Word(entry.getKey(), entry.getValue().size());
-            list.add(word);
-        }
-        wordList = list;
-
+    private String getOutputString(List<Word> wordList) {
         wordList.sort((w1, w2) -> w2.getCount() - w1.getCount());
 
         StringJoiner joiner = new StringJoiner("\n");
@@ -23,12 +19,13 @@ public class WordFrequencyGame {
         return joiner.toString();
     }
 
-    private Map<String, List<Word>> getStringListMap(String inputStr) {
-        //get the map for the next step of sizing the same word
-        return getListMap(Arrays.stream(inputStr.split("\\s+")).map(s -> new Word(s, 1)).collect(Collectors.toList()));
+    private List<Word> getWords(Map<String, List<Word>> map) {
+        return map.entrySet().stream().map(entry -> new Word(entry.getKey(), entry.getValue().size())).collect(Collectors.toList());
     }
 
-    private Map<String, List<Word>> getListMap(List<Word> wordList) {
-        return wordList.stream().collect(Collectors.groupingBy(Word::getText));
+    private Map<String, List<Word>> getStringListMap(String inputStr) {
+        //get the map for the next step of sizing the same word
+        return Arrays.stream(inputStr.split("\\s+")).map(s -> new Word(s, 1)).collect(Collectors.toList()).stream().collect(Collectors.groupingBy(Word::getText));
     }
+
 }
