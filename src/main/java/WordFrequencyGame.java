@@ -1,18 +1,16 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class WordFrequencyGame {
-    public String play(String inputStr) {
-        Map<String, List<Word>> map = getStringListMap(inputStr);
-        List<Word> wordList = getWords(map);
+class WordFrequencyGame {
+
+    String play(String inputStr) {
+        List<String> buildTexts = getBuildTexts(inputStr);
+        List<Word> wordList = getWords(getStringListMap(inputStr));
         return getOutputString(wordList);
     }
 
-    private String getOutputString(List<Word> wordList) {
-        return wordList.stream()
-                .sorted((w1, w2) -> w2.getCount() - w1.getCount())
-                .map(word -> word.getText() + " " + word.getCount())
-                .collect(Collectors.joining("\n"));
+    private List<String> getBuildTexts(String inputStr) {
+        return Arrays.asList(inputStr.split("\\s+"));
     }
 
     private List<Word> getWords(Map<String, List<Word>> map) {
@@ -25,4 +23,10 @@ public class WordFrequencyGame {
         return Arrays.stream(inputStr.split("\\s+")).map(s -> new Word(s, 1)).collect(Collectors.toList()).stream().collect(Collectors.groupingBy(Word::getText));
     }
 
+    private String getOutputString(List<Word> wordList) {
+        return wordList.stream()
+                .sorted((w1, w2) -> w2.getCount() - w1.getCount())
+                .map(word -> word.getText() + " " + word.getCount())
+                .collect(Collectors.joining("\n"));
+    }
 }
