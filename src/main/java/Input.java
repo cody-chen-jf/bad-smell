@@ -1,17 +1,17 @@
 public class Input {
-    private String value;
+    private String text;
     private int count;
 
-    public Input(String w, int i) {
-        this.value = w;
-        this.count = i;
+    public Input(String text, int count) {
+        this.text = text;
+        this.count = count;
     }
 
-    public String getValue() {
-        return this.value;
+    public String getText() {
+        return this.text;
     }
 
-    public int getWordCount() {
+    public int getCount() {
         return this.count;
     }
 }
