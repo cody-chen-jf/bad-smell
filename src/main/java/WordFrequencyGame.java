@@ -3,12 +3,12 @@ import java.util.stream.Collectors;
 
 class WordFrequencyGame {
 
-    public static final String SPACE_REGEX = "\\s+";
-    public static final String DELIMITER = "\n";
+    private static final String SPACE_REGEX = "\\s+";
+    private static final String DELIMITER = "\n";
 
     String play(String inputStr) {
         List<String> buildTexts = getBuildTexts(inputStr);
-        List<Word> wordList = getWords(buildTexts);
+        List<Word> wordList = getWordsNew(buildTexts);
         return getOutputString(wordList);
     }
 
@@ -22,6 +22,16 @@ class WordFrequencyGame {
                 .collect(Collectors.toList())
                 .stream()
                 .collect(Collectors.groupingBy(Word::getText))
+                .entrySet()
+                .stream()
+                .map(entry -> new Word(entry.getKey(), entry.getValue().size()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Word> getWordsNew(List<String> texts) {
+        return texts
+                .stream()
+                .collect(Collectors.groupingBy(text -> text))
                 .entrySet()
                 .stream()
                 .map(entry -> new Word(entry.getKey(), entry.getValue().size()))
