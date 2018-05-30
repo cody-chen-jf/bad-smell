@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class WordFrequencyGame {
     public String play(String inputStr) {
@@ -10,16 +11,8 @@ public class WordFrequencyGame {
             try {
 
                 //split the input string with 1 to n pieces of spaces
-                String[] arr = inputStr.split("\\s+");
-
-                List<Input> inputList = new ArrayList<>();
-                for (String s : arr) {
-                    Input input = new Input(s, 1);
-                    inputList.add(input);
-                }
-
-                //get the map for the next step of sizing the same word
-                Map<String, List<Input>> map = getListMap(inputList);
+                Map<String, List<Input>> map = getStringListMap(inputStr);
+                List<Input> inputList;
 
                 List<Input> list = new ArrayList<>();
                 for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
@@ -40,6 +33,15 @@ public class WordFrequencyGame {
                 return "Calculate Error";
             }
         }
+    }
+
+    private Map<String, List<Input>> getStringListMap(String inputStr) {
+        String[] arr = inputStr.split("\\s+");
+
+        List<Input> inputList = Arrays.stream(arr).map(s -> new Input(s, 1)).collect(Collectors.toList());
+
+        //get the map for the next step of sizing the same word
+        return getListMap(inputList);
     }
 
     private Map<String, List<Input>> getListMap(List<Input> inputList) {
