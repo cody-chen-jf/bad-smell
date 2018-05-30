@@ -1,8 +1,8 @@
-public class Input {
+public class Word {
     private String text;
     private int count;
 
-    public Input(String text, int count) {
+    public Word(String text, int count) {
         this.text = text;
         this.count = count;
     }

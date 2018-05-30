@@ -11,20 +11,20 @@ public class WordFrequencyGame {
             try {
 
                 //split the input string with 1 to n pieces of spaces
-                Map<String, List<Input>> map = getStringListMap(inputStr);
-                List<Input> inputList;
+                Map<String, List<Word>> map = getStringListMap(inputStr);
+                List<Word> wordList;
 
-                List<Input> list = new ArrayList<>();
-                for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
-                    Input input = new Input(entry.getKey(), entry.getValue().size());
-                    list.add(input);
+                List<Word> list = new ArrayList<>();
+                for (Map.Entry<String, List<Word>> entry : map.entrySet()) {
+                    Word word = new Word(entry.getKey(), entry.getValue().size());
+                    list.add(word);
                 }
-                inputList = list;
+                wordList = list;
 
-                inputList.sort((w1, w2) -> w2.getCount() - w1.getCount());
+                wordList.sort((w1, w2) -> w2.getCount() - w1.getCount());
 
                 StringJoiner joiner = new StringJoiner("\n");
-                for (Input w : inputList) {
+                for (Word w : wordList) {
                     String s = w.getText() + " " + w.getCount();
                     joiner.add(s);
                 }
@@ -35,27 +35,12 @@ public class WordFrequencyGame {
         }
     }
 
-    private Map<String, List<Input>> getStringListMap(String inputStr) {
-        String[] arr = inputStr.split("\\s+");
-
-        List<Input> inputList = Arrays.stream(arr).map(s -> new Input(s, 1)).collect(Collectors.toList());
-
+    private Map<String, List<Word>> getStringListMap(String inputStr) {
         //get the map for the next step of sizing the same word
-        return getListMap(inputList);
+        return getListMap(Arrays.stream(inputStr.split("\\s+")).map(s -> new Word(s, 1)).collect(Collectors.toList()));
     }
 
-    private Map<String, List<Input>> getListMap(List<Input> inputList) {
-        Map<String, List<Input>> map = new HashMap<>();
-        for (Input input : inputList) {
-//       map.computeIfAbsent(input.getText(), k -> new ArrayList<>()).add(input);
-            if (!map.containsKey(input.getText())) {
-                ArrayList arr = new ArrayList<>();
-                arr.add(input);
-                map.put(input.getText(), arr);
-            } else {
-                map.get(input.getText()).add(input);
-            }
-        }
-        return map;
+    private Map<String, List<Word>> getListMap(List<Word> wordList) {
+        return wordList.stream().collect(Collectors.groupingBy(Word::getText));
     }
 }
